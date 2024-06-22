@@ -3,7 +3,6 @@ const GameInstance = require("../models/gameInstance");
 
 exports.addScore = async (req, res, next) => {
   try {
-    req.body.name = typeof req.body.name === "string" ? req.body.name : "";
     const gameInstance = await GameInstance.findById(req.params.gameInstanceId)
       .populate("gameId")
       .exec();
@@ -15,9 +14,6 @@ exports.addScore = async (req, res, next) => {
       return res
         .status(403)
         .json({ err: "Cannot add score until game is completed" });
-    }
-    if (!req.body.name || req.body.name.length > 7) {
-      return res.json({ err: "Name must be between 1 and 7 characters" });
     }
     const time =
       Date.parse(gameInstance.updatedAt) - Date.parse(gameInstance.createdAt);
@@ -34,6 +30,7 @@ exports.addScore = async (req, res, next) => {
 
     res.json({ name: score.name, score: score.score });
   } catch (err) {
+    res.status(400).json({ err: "Bad request" });
     return next(err);
   }
 };

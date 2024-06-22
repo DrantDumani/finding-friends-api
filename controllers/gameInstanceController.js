@@ -4,9 +4,8 @@ const Character = require("../models/character");
 
 exports.createInstance = async (req, res, next) => {
   try {
-    req.body.chars = Array.isArray(req.body.chars) ? req.body.chars : [];
     const [validGame, chars] = await Promise.all([
-      Game.findById(req.body.gameId).exec(),
+      Game.findById(req.params.gameId).exec(),
       Promise.all(
         req.body.chars.map((char) => Character.findById(char).exec())
       ),
@@ -19,7 +18,7 @@ exports.createInstance = async (req, res, next) => {
       return res.status(422).json({ err: "Invalid game data" });
     } else {
       const gameInstance = new GameInstance({
-        gameId: req.body.gameId,
+        gameId: req.params.gameId,
         chars: validChars.map((char) => ({ char: char })),
       });
       await gameInstance.save();

@@ -16,7 +16,13 @@ exports.getSingleGame = async (req, res, next) => {
     const [game, characters] = await Promise.all([
       Game.findById(req.params.gameId).exec(),
       Character.aggregate([
-        { $match: { gameId: new mongoose.Types.ObjectId(req.params.gameId) } },
+        {
+          $match: {
+            gameId: mongoose.Types.ObjectId.createFromHexString(
+              req.params.gameId
+            ),
+          },
+        },
         { $sample: { size: 3 } },
         { $project: { name: 1, image: 1, gameId: 1 } },
       ]),
