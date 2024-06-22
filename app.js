@@ -7,6 +7,7 @@ require("dotenv").config();
 
 const gameRouter = require("./routes/gameRouter");
 const gameInstanceRouter = require("./routes/gameInstanceRouter");
+const scoreRouter = require("./routes/scoreRouter");
 
 const mongoURI = process.env.PRODUCTION_DB || process.env.DEVELOPMENT_DB;
 const port = process.env.PORT;
@@ -24,9 +25,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
-// Place routers here
 app.use("/games", gameRouter);
 app.use("/gameInstances", gameInstanceRouter);
+app.use("/scores", scoreRouter);
 
 app.use((err, req, res, next) => {
   const error = req.app.get("env") === "development" ? err.message : "";
