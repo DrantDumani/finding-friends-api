@@ -55,7 +55,6 @@ exports.findCharacter = async (req, res, next) => {
       return res.status(404).json("Invalid or expired game");
     } else {
       const { xPos, yPos } = req.body.coords;
-      console.log(xPos, character.lX);
       if (
         xPos >= character.lX &&
         xPos <= character.uX &&

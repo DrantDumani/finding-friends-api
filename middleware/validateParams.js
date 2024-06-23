@@ -32,7 +32,7 @@ exports.characterIds = (req, res, next) => {
 };
 
 exports.playerName = (req, res, next) => {
-  if (req.body.name || req.body.name.length > 7) {
+  if (!req.body.name || req.body.name.length > 7) {
     return res.status(400).json({ err: "Bad request" });
   }
   return next();
