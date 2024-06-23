@@ -1,6 +1,7 @@
 const GameInstance = require("../models/gameInstance");
 const Game = require("../models/game");
 const Character = require("../models/character");
+const { getImgPath } = require("../utils/getImgPath");
 
 exports.createInstance = async (req, res, next) => {
   try {
@@ -22,7 +23,7 @@ exports.createInstance = async (req, res, next) => {
         chars: validChars.map((char) => ({ char: char })),
       });
       await gameInstance.save();
-      res.json({ msg: "Game successfully started!" });
+      res.json({ _id: gameInstance._id });
     }
   } catch (err) {
     return next(err);
@@ -37,6 +38,10 @@ exports.getInstance = async (req, res, next) => {
     if (!gameInstance) {
       return res.status(404).json({ err: "Invalid or expired game" });
     } else {
+      gameInstance.gameId.image = getImgPath(req, gameInstance.gameId.image);
+      gameInstance.chars.forEach(
+        (charObj) => (charObj.char.image = getImgPath(req, charObj.char.image))
+      );
       return res.json(gameInstance);
     }
   } catch (err) {
