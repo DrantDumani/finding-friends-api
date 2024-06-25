@@ -5,6 +5,8 @@ const cors = require("cors");
 const logger = require("morgan");
 const createError = require("http-errors");
 require("dotenv").config();
+const compression = require("compression");
+const helmet = require("helmet");
 
 const gameRouter = require("./routes/gameRouter");
 const gameInstanceRouter = require("./routes/gameInstanceRouter");
@@ -20,11 +22,24 @@ async function main() {
 }
 
 const app = express();
+app.use(compression());
+app.use(helmet());
 
+const RateLimit = require("express-rate-limit");
+const limiter = RateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 300,
+});
+
+app.use(limiter);
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors());
+app.use(
+  cors({
+    origin: ["https://finding-friends.netlify.app"],
+  })
+);
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/games", gameRouter);
