@@ -10,10 +10,6 @@ router.post(
   scoreController.addScore
 );
 
-router.get(
-  "/:gameInstanceId",
-  validateParams.gameInstanceId,
-  scoreController.getScores
-);
+router.get("/:gameId", validateParams.gameId, scoreController.getScores);
 
 module.exports = router;
