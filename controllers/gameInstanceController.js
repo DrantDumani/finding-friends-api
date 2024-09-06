@@ -39,6 +39,7 @@ exports.getInstance = async (req, res, next) => {
       return res.status(404).json({ err: "Invalid or expired game" });
     } else {
       gameInstance.gameId.image = getImgPath(req, gameInstance.gameId.image);
+      gameInstance._doc.elapsedTime = Date.now() - gameInstance.createdAt;
       gameInstance.chars.forEach(
         (charObj) => (charObj.char.image = getImgPath(req, charObj.char.image))
       );

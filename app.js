@@ -37,7 +37,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: ["https://finding-friends.netlify.app"],
+    origin: ["https://finding-friends.netlify.app", "http://localhost:5173"],
   })
 );
 app.use(express.static(path.join(__dirname, "public")));
