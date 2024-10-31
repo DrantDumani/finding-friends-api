@@ -3,21 +3,15 @@ const router = express.Router();
 const validateParams = require("../middleware/validateParams");
 const gameInstanceController = require("../controllers/gameInstanceController");
 
-router.get(
-  "/:gameInstanceId",
-  validateParams.gameInstanceId,
-  gameInstanceController.getInstance
-);
-
 router.post(
   "/:gameId",
-  validateParams.gameId,
-  validateParams.characterIds,
+  validateParams.validateToken,
   gameInstanceController.createInstance
 );
 
 router.put(
-  "/:gameInstanceId/:characterId",
+  "/:characterId",
+  validateParams.validateToken,
   gameInstanceController.findCharacter
 );
 

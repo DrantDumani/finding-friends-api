@@ -5,8 +5,8 @@ const validateParams = require("../middleware/validateParams");
 
 router.post(
   "/:gameInstanceId",
+  validateParams.validateToken,
   validateParams.playerName,
-  validateParams.gameInstanceId,
   scoreController.addScore
 );
 

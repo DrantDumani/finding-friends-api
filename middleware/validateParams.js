@@ -37,3 +37,14 @@ exports.playerName = (req, res, next) => {
   }
   return next();
 };
+
+// make sure there IS a token, because it's needed for this route
+
+exports.validateToken = (req, res, next) => {
+  const token = req.get("authorization");
+  if (!token) return res.status(400).json({ err: "Bad request" });
+  else {
+    res.locals.gameToken = token.split(" ")[1];
+    return next();
+  }
+};
