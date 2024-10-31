@@ -2,6 +2,7 @@ const Game = require("../models/game");
 const Character = require("../models/character");
 const mongoose = require("mongoose");
 const { getImgPath } = require("../utils/getImgPath");
+const jwt = require("jsonwebtoken");
 
 exports.getAllThumbnails = async (req, res, next) => {
   try {
@@ -26,7 +27,7 @@ exports.getSingleGame = async (req, res, next) => {
           },
         },
         { $sample: { size: 3 } },
-        { $project: { name: 1, image: 1, gameId: 1 } },
+        { $project: { name: 1, image: 1 } },
       ]),
     ]);
     if (!game) {
@@ -34,7 +35,9 @@ exports.getSingleGame = async (req, res, next) => {
     } else {
       game.image = getImgPath(req, game.image);
       characters.forEach((char) => (char.image = getImgPath(req, char.image)));
-      return res.json({ game, characters });
+      const payload = { game, characters };
+      const token = jwt.sign(payload, process.env.SECRET);
+      return res.json(token);
     }
   } catch (err) {
     return next(err);
